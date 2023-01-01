@@ -1,0 +1,33 @@
+@baseurl = http://microservice-1st-app.com
+@url_posts = http://microservice-1st-app.com
+@url_comments = http://microservice-1st-app.com
+@url_query = http://microservice-1st-app.com
+@contentType = application/json
+
+http://microservice-1st-app.com/posts/${postId}/comments
+http://microservice-1st-app.com/posts/create
+http://microservice-1st-app.com/posts
+
+### Create Post
+# @prompt title Your post title
+POST {{baseurl}}/posts/create HTTP/1.1
+content-type: {{contentType}}
+
+{
+    "title": "{{title}}"
+}
+
+### Create Comment
+# @prompt postId Post ID
+# @prompt content Content of Post
+POST {{baseurl}}/posts/{{postId}}/comments HTTP/1.1
+content-type: {{contentType}}
+
+{
+    "content": "{{content}}"
+}
+
+
+###
+GET {{baseurl}}/posts HTTP/1.1
+Content-Type: {{contentType}}
