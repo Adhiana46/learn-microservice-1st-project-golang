@@ -116,7 +116,16 @@ func handleEvents(c echo.Context) error {
 	log.Println("Reveived Event", event.Type)
 
 	if event.Type == "CommentModerated" {
-		payload := event.Data.(Comment)
+		payload := Comment{}
+
+		jsonData, err := json.Marshal(event.Data)
+		if err != nil {
+			return err
+		}
+
+		if err := json.Unmarshal(jsonData, &payload); err != nil {
+			return err
+		}
 
 		comments := commentsByPostId[payload.PostID]
 
