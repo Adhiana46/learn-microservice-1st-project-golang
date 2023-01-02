@@ -6,8 +6,8 @@ build-images:
 	docker build -t adhiana46/ms-golang-post-service:$(version) ./posts/
 	docker build -t adhiana46/ms-golang-comment-service:$(version) ./comments/
 	docker build -t adhiana46/ms-golang-event-bus:$(version) ./event-bus/
+	docker build -t adhiana46/ms-golang-query-service:$(version) ./query/
 	# docker build -t adhiana46/ms-golang-moderation-service:$(version) ./moderation/
-	# docker build -t adhiana46/ms-golang-query-service:$(version) ./query/
 	echo "Done building images."
 push-images:
 	echo "Pushing images version $(version) to docker hub"
@@ -15,8 +15,8 @@ push-images:
 	docker push adhiana46/ms-golang-post-service:$(version)
 	docker push adhiana46/ms-golang-comment-service:$(version)
 	docker push adhiana46/ms-golang-event-bus:$(version)
+	docker push adhiana46/ms-golang-query-service:$(version)
 	# docker push adhiana46/ms-golang-moderation-service:$(version)
-	# docker push adhiana46/ms-golang-query-service:$(version)
 	echo "Done pushing images."
 k8s-apply:
 	kubectl apply -f ./infra/k8s
@@ -34,7 +34,6 @@ minikube-clean:
 	docker.io/adhiana46/ms-golang-client-react \
 	docker.io/adhiana46/ms-golang-post-service \
 	docker.io/adhiana46/ms-golang-comment-service \
-	docker.io/adhiana46/ms-golang-event-bus 
-	# \
+	docker.io/adhiana46/ms-golang-event-bus \
+	docker.io/adhiana46/ms-golang-query-service
 	# docker.io/adhiana46/ms-golang-moderation-service \
-	# docker.io/adhiana46/ms-golang-query-service

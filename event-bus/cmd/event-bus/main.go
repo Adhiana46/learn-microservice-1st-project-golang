@@ -66,9 +66,11 @@ func handlePostEvent(c echo.Context) error {
 
 	log.Println("Received Event: ", event.Type)
 
+	events = append(events, event)
+
 	sendEvent("http://posts-clusterip-srv:4000/events", event)
 	sendEvent("http://comments-clusterip-srv:4001/events", event)
-	// sendEvent("http://query-clusterip-srv:4002/events", event)
+	sendEvent("http://query-clusterip-srv:4002/events", event)
 	// sendEvent("http://moderation-clusterip-srv:4003/events", event)
 
 	return c.NoContent(http.StatusOK)
