@@ -1,0 +1,63 @@
+apiVersion: skaffold/v4beta1
+kind: Config
+metadata:
+  name: learn-microservice--st-project-golang
+build:
+  artifacts:
+  - image: adhiana46/ms-golang-client-react
+    context: client-react
+    docker:
+      dockerfile: Dockerfile
+    sync:
+       manual:
+         - dest: "src/**/*.js"
+           src: .
+  - image: adhiana46/ms-golang-comment-service
+    context: comments
+    docker:
+      dockerfile: Dockerfile
+    sync:
+      manual:
+        - dest: "**/*.go"
+          src: .
+  - image: adhiana46/ms-golang-event-bus
+    context: event-bus
+    docker:
+      dockerfile: Dockerfile
+    sync:
+      manual:
+        - dest: "**/*.go"
+          src: .
+  - image: adhiana46/ms-golang-moderation-service
+    context: moderation
+    docker:
+      dockerfile: Dockerfile
+    sync:
+      manual:
+        - dest: "**/*.go"
+          src: .
+  - image: adhiana46/ms-golang-post-service
+    context: posts
+    docker:
+      dockerfile: Dockerfile
+    sync:
+      manual:
+        - dest: "**/*.go"
+          src: .
+  - image: adhiana46/ms-golang-query-service
+    context: query
+    docker:
+      dockerfile: Dockerfile
+    sync:
+      manual:
+        - dest: "**/*.go"
+          src: .
+manifests:
+  rawYaml:
+  - infra/k8s/client-react-depl.yaml
+  - infra/k8s/comments-depl.yaml
+  - infra/k8s/event-bus-depl.yaml
+  - infra/k8s/ingress-srv.yaml
+  - infra/k8s/moderation-depl.yaml
+  - infra/k8s/posts-depl.yaml
+  - infra/k8s/query-depl.yaml

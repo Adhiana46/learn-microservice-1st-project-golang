@@ -6,7 +6,6 @@ import (
 	"log"
 	"net/http"
 	"strings"
-	"time"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -77,7 +76,7 @@ func handleEvent(event Event) error {
 			comment.Status = "approved"
 		}
 
-		time.Sleep(5 * time.Second)
+		// time.Sleep(5 * time.Second)
 
 		// send event
 		event := Event{
