@@ -1,12 +1,5 @@
 @baseurl = http://microservice-1st-app.com
-@url_posts = http://microservice-1st-app.com
-@url_comments = http://microservice-1st-app.com
-@url_query = http://microservice-1st-app.com
 @contentType = application/json
-
-http://microservice-1st-app.com/posts/${postId}/comments
-http://microservice-1st-app.com/posts/create
-http://microservice-1st-app.com/posts
 
 ### Create Post
 # @prompt title Your post title

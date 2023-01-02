@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-react
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: client-react
+  template:
+    metadata:
+      labels:
+        app: client-react
+    spec:
+      containers:
+      - name: client-react
+        image: adhiana46/ms-golang-client-react
+        imagePullPolicy: IfNotPresent
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: client-react-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: client-react
+  ports:
+  - name: client-react
+    protocol: TCP
+    port: 3000
+    targetPort: 3000

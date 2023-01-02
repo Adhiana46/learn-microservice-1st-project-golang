@@ -1,6 +1,8 @@
 package main
 
 import (
+	"bytes"
+	"encoding/json"
 	"log"
 	"net/http"
 
@@ -18,7 +20,7 @@ type Comment struct {
 
 type Event struct {
 	Type string      `json:"type"`
-	Data interface{} `json:data"`
+	Data interface{} `json:"data"`
 }
 
 var commentsByPostId map[string][]Comment = make(map[string][]Comment)
@@ -34,6 +36,30 @@ func main() {
 	r.POST("/events", handleEvents)
 
 	r.Logger.Fatal(r.Start(":4001"))
+}
+
+func sendEvent(url string, event Event) error {
+	log.Println("sendEvent", url, event)
+
+	jsonData, err := json.Marshal(event)
+	if err != nil {
+		return err
+	}
+
+	request, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
+	if err != nil {
+		return err
+	}
+
+	request.Header.Add("Content-Type", "application/json")
+
+	client := &http.Client{}
+	_, err = client.Do(request)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func handleGetComments(c echo.Context) error {
@@ -69,6 +95,12 @@ func handleCreateComment(c echo.Context) error {
 	commentsByPostId[postId] = comments
 
 	// TODO: send event CommentCreated
+	event := Event{
+		Type: "CommentCreated",
+		Data: comment,
+	}
+
+	sendEvent("http://event-bus-srv:4005/events", event)
 
 	return c.JSON(http.StatusCreated, comments)
 }
@@ -77,10 +109,28 @@ func handleEvents(c echo.Context) error {
 	event := Event{}
 
 	if err := c.Bind(&event); err != nil {
+		log.Println(err)
 		return c.NoContent(http.StatusBadRequest)
 	}
 
 	log.Println("Reveived Event", event.Type)
+
+	if event.Type == "CommentModerated" {
+		payload := event.Data.(Comment)
+
+		comments := commentsByPostId[payload.PostID]
+
+		for i := 0; i < len(comments); i++ {
+			if comments[i].ID == payload.ID {
+				comments[i].Status = payload.Status
+			}
+		}
+
+		sendEvent("http://event-bus-srv:4005/events", Event{
+			Type: "CommentUpdated",
+			Data: payload,
+		})
+	}
 
 	return c.NoContent(http.StatusOK)
 }

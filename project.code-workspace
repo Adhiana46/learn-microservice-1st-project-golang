@@ -1,0 +1,25 @@
+{
+	"folders": [
+		{
+			"path": "query"
+		},
+		{
+			"path": "posts"
+		},
+		{
+			"path": "moderation"
+		},
+		{
+			"path": "infra"
+		},
+		{
+			"path": "event-bus"
+		},
+		{
+			"path": "comments"
+		},
+		{
+			"path": "client-react"
+		}
+	]
+}
